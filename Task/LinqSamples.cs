@@ -105,8 +105,8 @@ namespace SampleQueries
         {
 
             var list = (from s in dataSource.Suppliers
-                       join c in dataSource.Customers on new { s.City, s.Country } equals new { c.City, c.Country }
-                       select new { c.CustomerID, s.SupplierName, c.Country, c.City });
+                        join c in dataSource.Customers on new { s.City, s.Country } equals new { c.City, c.Country }
+                        select new { c.CustomerID, s.SupplierName, c.Country, c.City });
 
 
 
@@ -115,9 +115,9 @@ namespace SampleQueries
                         group c by c.CustomerID into cus
                         select new { cus.Key, Customers = cus });
 
-            
-                   
-                         
+
+
+
 
             var f = dataSource.Customers.Join(dataSource.Suppliers,
                                               c => new { c.City, c.Country },
@@ -129,7 +129,7 @@ namespace SampleQueries
 
             foreach (var item in f)
             {
-                Console.WriteLine(item.Key);
+                Console.WriteLine("For customer {0}", item.Key);
 
                 foreach (var i in item)
                 {
@@ -160,29 +160,49 @@ namespace SampleQueries
         [Description("****")]
         public void Linq3()
         {
-            int value = 5000;
+            int value = 10000;
 
-            var s = from c in dataSource.Customers
-                    from o in c.Orders
-                    where o.Total > value
-                    select c;
+            var customers1 = (from c in dataSource.Customers
+                             from o in c.Orders
+                             where o.Total > value
+                             select c).Distinct();
+                                    
 
-
-            var d = s.Distinct();
-            
-            var customers = dataSource.Customers.SelectMany(c => c.Orders).Where(o => o.Total > value);
-
-            //var dfdf = dataSource.Customers.Where();
+            var customers2 = dataSource.Customers.Where(c => c.Orders.Any(o => o.Total > value)).Distinct();
 
 
 
-            ObjectDumper.Write(customers);
+            ObjectDumper.Write(customers1);
 
+            Console.WriteLine();
 
+            ObjectDumper.Write(customers2);
 
 
 
         }
+
+
+
+
+        [Category("My queries")]
+        [Title("Task 4")]
+        [Description("****")]
+        public void Linq4()
+        {
+
+
+            var ff = dataSource.Customers.Select((x,y)=>new { x.CompanyName, y  });
+
+
+            foreach (var item in ff)
+            {
+                Console.WriteLine(item.CompanyName+" "+item.y);
+            }
+
+        }
+
+
     }
 }
 
