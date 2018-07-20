@@ -8,3 +8,12 @@ C:\Users\iammr\Desktop\Task\Task\obj\Debug\Task.csproj.GenerateResource.cache
 C:\Users\iammr\Desktop\Task\Task\obj\Debug\Task.csproj.CoreCompileInputs.cache
 C:\Users\iammr\Desktop\Task\Task\obj\Debug\Task.exe
 C:\Users\iammr\Desktop\Task\Task\obj\Debug\Task.pdb
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\bin\Debug\Task.exe.config
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\obj\Debug\Task.exe
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\obj\Debug\Task.pdb
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\bin\Debug\Task.exe
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\bin\Debug\Task.pdb
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\obj\Debug\Task.csprojResolveAssemblyReference.cache
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\obj\Debug\Task.Properties.Resources.resources
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\obj\Debug\SampleSupport.SampleForm.resources
+C:\Users\Evgeniy_Chernyshkov\Desktop\New folder (2)\LINQ\Task\obj\Debug\Task.csproj.GenerateResource.Cache
