@@ -174,7 +174,7 @@ namespace SampleQueries
             var customers2 = dataSource.Customers
                                 .Where(c => c.Orders.Any(o => o.Total > value));
 
-            
+
 
             ObjectDumper.Write(customers2);
 
@@ -243,7 +243,7 @@ namespace SampleQueries
                           Select(c => new
                           {
                               c.CompanyName,
-                              OrderDate = c.Orders.Min(o=>(DateTime?)o.OrderDate),
+                              OrderDate = c.Orders.Min(o => (DateTime?)o.OrderDate),
                               Total = c.Orders.Sum(s => s.Total)
 
                           });
@@ -270,10 +270,10 @@ namespace SampleQueries
             Console.WriteLine("\nSort by customer name\n");
             var sortByNameListt = customers1.OrderBy(o => o.CompanyName);
             ObjectDumper.Write(sortByNameListt);
-            
+
 
             Console.WriteLine("\nSort by multiple fields \n");
-            var sortMultipleField = customers1.OrderBy(n => n.CompanyName).ThenBy(d=>d.OrderDate).ThenByDescending(s=>s.Total);
+            var sortMultipleField = customers1.OrderBy(n => n.CompanyName).ThenBy(d => d.OrderDate).ThenByDescending(s => s.Total);
             ObjectDumper.Write(sortByNameListt);
 
             Console.WriteLine();
@@ -282,10 +282,43 @@ namespace SampleQueries
 
         }
 
+        [Category("My queries")]
+        [Title("Task 6")]
+        [Description("Укажите всех клиентов, у которых указан нецифровой почтовый код или не заполнен регион или в телефоне не указан код оператора (для простоты считаем, что это равнозначно «нет круглых скобочек в начале»)")]
+        public void Linq6()
+        {
 
-      
+            //в виде методов
+            var customers1 = dataSource.Customers
+                           .Where(cus => !int.TryParse(cus.PostalCode, out int res)
+                                       || cus.Region == null
+                                       || !cus.Phone.StartsWith("("))
+                           .Select(c => new { c.CustomerID, c.PostalCode, c.Region, c.Phone });
 
 
+            //в виде выражения 
+            int result;
+            var customers2 = from c in dataSource.Customers
+                             where !int.TryParse(c.PostalCode, out result)
+                                   || c.Region == null
+                                   || !c.Phone.StartsWith("(")
+                             select new { c.CustomerID, c.PostalCode, c.Region, c.Phone };
+
+
+
+            Console.WriteLine(customers2.Count());
+            ObjectDumper.Write(customers2);
+
+        }
+
+
+        [Category("My queries")]
+        [Title("Task 7")]
+        [Description("Сгруппируйте все продукты по категориям, внутри – по наличию на складе, внутри последней группы отсортируйте по стоимости)")]
+        public void Linq7()
+        {
+
+        }
     }
 }
 
