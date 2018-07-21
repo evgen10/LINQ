@@ -23,6 +23,8 @@ namespace SampleQueries
     public class LinqSamples : SampleHarness
     {
 
+
+
         private DataSource dataSource = new DataSource();
 
 
@@ -34,11 +36,12 @@ namespace SampleQueries
         {
             int value = 20000;
 
+            //в виде выражения 
             var customers1 = from c in dataSource.Customers
                              where c.Orders.Sum(o => o.Total) > value
                              select new { c.CompanyName, TotalSum = c.Orders.Sum(o => o.Total) };
 
-
+            //в виде методов
             var customers2 = dataSource.Customers
                                 .Where(c => c.Orders.Sum(o => o.Total) > value)
                                 .Select(c => new { c.CompanyName, TotalSum = c.Orders.Sum(o => o.Total) });
@@ -87,6 +90,7 @@ namespace SampleQueries
             {
                 Console.WriteLine("{0} from {1}, {2} ", customers.CompanyName, customers.Country, customers.City);
 
+                //в виде методов
                 var suppliers = dataSource.Suppliers
                                     .Where(s => s.Country == customers.Country && s.City == customers.City)
                                     .Select(s => new { s.SupplierName, s.Country, s.City });
@@ -116,7 +120,7 @@ namespace SampleQueries
         public void Linq2WithGrouping()
         {
 
-
+            //в виде методов
             var customers1 = dataSource.Customers
                               .Join(dataSource.Suppliers,
                                    c => new { c.City, c.Country },
@@ -124,7 +128,7 @@ namespace SampleQueries
                                    (c, s) => c)
                               .GroupBy(cus => cus.CompanyName);
 
-
+            //в виде выражения 
             var customers2 = from s in dataSource.Suppliers
                              join c in dataSource.Customers on new { s.City, s.Country } equals new { c.City, c.Country }
                              group c by c.CompanyName;
@@ -161,11 +165,12 @@ namespace SampleQueries
         {
             int value = 2000;
 
+            //в виде выражения 
             var customers1 = from c in dataSource.Customers
                              where c.Orders.Any(o => o.Total > value)
                              select c;
 
-
+            //в виде методов
             var customers2 = dataSource.Customers
                                 .Where(c => c.Orders.Any(o => o.Total > value));
 
@@ -185,7 +190,7 @@ namespace SampleQueries
         [Description("Выдайте список клиентов с указанием, начиная с какого месяца какого года они стали клиентами (принять за таковые месяц и год самого первого заказа)")]
         public void Linq4()
         {
-
+            //в виде методов
             var customers1 = dataSource.Customers
                              .Select(c => new
                              {
@@ -194,7 +199,7 @@ namespace SampleQueries
 
                              });
 
-
+            //в виде выражения 
             var customers2 = from c in dataSource.Customers
                              select new
                              {
@@ -231,9 +236,9 @@ namespace SampleQueries
         [Title("Task 5")]
         [Description("Сделайте предыдущее задание, но выдайте список отсортированным по году, месяцу, оборотам клиента (от максимального к минимальному) и имени клиента")]
         public void Linq5()
-        {                 
-          
+        {
 
+            //в виде методов
             var customers1 = dataSource.Customers.
                           Select(c => new
                           {
@@ -242,8 +247,9 @@ namespace SampleQueries
                               Total = c.Orders.Sum(s => s.Total)
 
                           });
-           
 
+
+            //в виде выражения 
             var customers2 = from c in dataSource.Customers
                              select new
                              {
