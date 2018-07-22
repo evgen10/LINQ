@@ -318,7 +318,49 @@ namespace SampleQueries
         public void Linq7()
         {
 
+            //в виде методов
+            var products1 = dataSource.Products
+                                     .GroupBy(p => p.Category)
+                                     .Select(i => new
+                                     {
+                                         Category = i.Key,
+                                         CategoryGroup = i.GroupBy(s => s.UnitsInStock)
+                                                    .Select(price => new
+                                                    {
+                                                        UnitInStock = price.Key,
+                                                        InStockGroup = price.OrderByDescending(o=>o.UnitPrice)
+                                                    })
+                                     });
+            
+
+            //в виде выражения 
+            var products2 = from product in dataSource.Products
+                            group product by product.Category into categoryGroup
+                            select new
+                            {
+                                Category = categoryGroup.Key,
+                                CategoryGroup = from categories in categoryGroup
+                                                group categories by categories.UnitsInStock into inStockGroup
+                                                select new
+                                                {
+                                                    UnitInStock = inStockGroup.Key,
+                                                    InStockGroup = inStockGroup.OrderByDescending(o => o.UnitPrice)
+                                                }
+                            };
+
+            ObjectDumper.Write(products1, 3);
+
+            Console.WriteLine();
+
+            ObjectDumper.Write(products2, 3);
+
         }
+
+
+
+
+
+
     }
 }
 
