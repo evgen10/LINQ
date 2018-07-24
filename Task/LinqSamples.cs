@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using SampleSupport;
 using Task.Data;
+using Task;
 
 // Version Mad01
 
@@ -328,10 +329,10 @@ namespace SampleQueries
                                                     .Select(price => new
                                                     {
                                                         UnitInStock = price.Key,
-                                                        InStockGroup = price.OrderByDescending(o=>o.UnitPrice)
+                                                        InStockGroup = price.OrderByDescending(o => o.UnitPrice)
                                                     })
                                      });
-            
+
 
             //в виде выражения 
             var products2 = from product in dataSource.Products
@@ -355,6 +356,163 @@ namespace SampleQueries
             ObjectDumper.Write(products2, 3);
 
         }
+
+
+        [Category("My queries")]
+        [Title("Task 8")]
+        [Description("Сгруппируйте товары по группам «дешевые», «средняя цена», «дорогие». Границы каждой группы задайте сами")]
+        public void Linq8()
+        {
+
+            ProductComparer comparer = new ProductComparer();
+
+
+            var products = dataSource.Products.GroupBy(p => p.UnitPrice, comparer);
+
+
+
+
+
+
+            foreach (var product in products)
+            {
+                if (comparer.DeterminePriceCategory(product.Key) == ProductPriceCategories.LowPrice)
+                {
+                    Console.WriteLine("Дешевые товары");
+                }
+
+
+                if (comparer.DeterminePriceCategory(product.Key) == ProductPriceCategories.AveragePrice)
+                {
+                    Console.WriteLine("Средние товары");
+                }
+
+                if (comparer.DeterminePriceCategory(product.Key) == ProductPriceCategories.HightPrice)
+                {
+                    Console.WriteLine("Дорогие товары");
+                }
+
+                foreach (var i in product)
+                {
+                    Console.WriteLine(i.UnitPrice + " " + i.ProductName);
+                }
+
+            }
+
+
+
+        }
+
+
+
+        [Category("My queries")]
+        [Title("Task 9")]
+        [Description("Рассчитайте среднюю прибыльность каждого города (среднюю сумму заказа по всем клиентам из данного города) и среднюю интенсивность (среднее количество заказов, приходящееся на клиента из каждого города)")]
+        public void Linq9()
+        {
+
+            var cities1 = from c in dataSource.Customers
+                          group c by c.City into cityGroup
+                          select new
+                          {
+                              City = cityGroup.Key,
+                              AverageOrderSum = (from ct in cityGroup
+                                                 from o in ct.Orders
+                                                 select o.Total)
+                                                 .Average(),
+                              AverageIntensity = (from ct in cityGroup
+                                                  select ct.Orders.Length).Average()
+                          };
+
+
+            var cities2 = dataSource.Customers
+                                        .GroupBy(c => c.City)
+                                        .Select(grC =>
+                                        new
+                                        {
+                                            City = grC.Key,
+                                            AverageOrderSum = grC
+                                                                .SelectMany(ct => ct
+                                                                                    .Orders
+                                                                                    .Select(o => o.Total))
+                                                                                    .Average(),
+                                            AverageIntensity = grC
+                                                                 .Select(ct => ct
+                                                                                 .Orders.Length)
+                                                                                 .Average()
+                                        });
+
+
+            ObjectDumper.Write(cities1);
+
+            Console.WriteLine("   ");
+
+            ObjectDumper.Write(cities2);
+        }
+
+
+
+        [Category("My queries")]
+        [Title("Task 10")]
+        [Description("Сделайте среднегодовую статистику активности клиентов по месяцам (без учета года), статистику по годам, по годам и месяцам (т.е. когда один месяц в разные годы имеет своё значение).")]
+        public void Linq10()
+        {
+
+            //var stat = dataSource.Customers
+            //                        .SelectMany(o =>  o.Orders)
+            //                        .GroupBy(p => p.OrderDate.Month, h=>new { Name = dataSource.Customers.Where(op=>op.Orders == op) })
+            //                          //new
+            //                          //{
+            //                          //    p.OrderDate.Year,
+            //                          //    p.OrderDate.Month
+            //                          //})
+            //                        .Select(t => new
+            //                        {
+            //                            t.Key,
+            //                            Orders = t
+            //                        });
+
+
+
+                                        //Console.WriteLine("hjghjgjhg");
+
+
+
+
+            //ObjectDumper.Write(stat,3);
+
+            
+
+
+            //foreach (var item in stat)
+            //{
+            //    Console.WriteLine("Key" + item.Key);
+            //    foreach (var it in item)
+            //    {
+            //        Console.WriteLine(it.CompanyName+" ");
+
+            //        foreach (var i in it.Orders)
+            //        {
+            //            Console.WriteLine(i.OrderDate);
+            //        }
+            //    }
+            //}
+
+
+            //foreach (var item in stat)
+            //{
+            //    Console.WriteLine("Key" + item.Key);
+            //    foreach (var it in item)
+            //    {
+            //        ObjectDumper.Write(it, 1);
+
+            //    }
+            //}
+
+
+        }
+
+
 
 
 

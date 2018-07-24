@@ -53,6 +53,7 @@
     <Compile Include="Data\Supplier.cs" />
     <Compile Include="LinqSamples.cs" />
     <Compile Include="ObjectDumper.cs" />
+    <Compile Include="ProductComparer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleForm.cs">
